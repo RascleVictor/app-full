@@ -1,0 +1,22 @@
+name: Docker Security Scan
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  scan-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Trivy
+        uses: aquasecurity/trivy-action@v1
+
+      - name: Scan Backend Docker image
+        run: trivy image backend:latest
+
+      - name: Scan Frontend Docker image
+        run: trivy image frontend:latest
