@@ -1,0 +1,52 @@
+.header {
+        width: 100%;          /* s'assure que le header prend toute la largeur */
+        height: 70px;
+        background-color: #1e272e;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 40px;
+        box-sizing: border-box; /* inclut le padding dans la largeur */
+        position: fixed;       /* pour que le header reste en haut */
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
+
+
+.header-title {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.header-nav {
+    display: flex;
+    gap: 20px;
+}
+
+.header-link {
+    color: #dcdde1;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.header-link:hover {
+    color: #4cd137;
+}
+
+.header-button {
+    background-color: #4cd137;
+    color: #1e272e;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.header-button:hover {
+    background-color: #44bd32;
+}

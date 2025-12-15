@@ -1,0 +1,10 @@
+.logout-container {
+    min-height: calc(100vh - 70px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffeaa7;
+    color: #2d3436;
+    font-size: 24px;
+    font-weight: bold;
+}
