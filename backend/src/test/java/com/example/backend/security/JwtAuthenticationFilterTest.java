@@ -126,7 +126,6 @@ class JwtAuthenticationFilterTest {
 
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
 
-        // On s'assure que validateToken et userDetailsService ne sont jamais appelés
         verify(jwtUtil, never()).validateToken(any());
         verify(userDetailsService, never()).loadUserByUsername(any());
 

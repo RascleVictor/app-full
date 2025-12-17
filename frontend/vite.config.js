@@ -3,8 +3,18 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
     plugins: [react()],
-    base: '/',  // indispensable pour que Nginx serve correctement les fichiers
+    base: '/',
     build: {
         outDir: 'dist',
-    }
+    },
+    test: {
+        globals: true,
+        environment: 'jsdom',
+        include: ['spec/**/*.test.{js,ts,jsx,tsx}'],
+        setupFiles: './spec/setupTests.js',
+        coverage: {
+            provider: 'c8',
+            reporter: ['text', 'json', 'html'],
+        },
+    },
 })
