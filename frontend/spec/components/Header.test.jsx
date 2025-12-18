@@ -4,17 +4,21 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Header from "/src/components/Header";
 
+const mockNavigate = vi.fn();
+
 vi.mock("react-router-dom", async () => {
     const actual = await vi.importActual("react-router-dom");
     return {
         ...actual,
-        useNavigate: () => vi.fn(),
+        useNavigate: () => mockNavigate,
     };
 });
+
 
 describe("Header component", () => {
     beforeEach(() => {
         localStorage.clear();
+        mockNavigate.mockClear();
     });
 
     it("affiche Home, Login et Register si pas de token", () => {
@@ -45,9 +49,6 @@ describe("Header component", () => {
     });
 
     it("supprime le token et redirige au clic sur Logout", () => {
-        const mockNavigate = vi.fn();
-        vi.mocked(require("react-router-dom").useNavigate).mockReturnValue(mockNavigate);
-
         localStorage.setItem("token", "fake-token");
 
         render(
@@ -56,8 +57,7 @@ describe("Header component", () => {
             </MemoryRouter>
         );
 
-        const logoutBtn = screen.getByText("Logout");
-        fireEvent.click(logoutBtn);
+        fireEvent.click(screen.getByText("Logout"));
 
         expect(localStorage.getItem("token")).toBeNull();
         expect(mockNavigate).toHaveBeenCalledWith("/");
