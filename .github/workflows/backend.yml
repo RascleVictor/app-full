@@ -10,6 +10,21 @@ jobs:
   build-backend:
     runs-on: ubuntu-latest
 
+    # Configuration du service MySQL
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: test_password
+          MYSQL_DATABASE: appsecure_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -28,9 +43,33 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in {1..30}; do
+            if mysqladmin ping -h"127.0.0.1" -P"3306" -uroot -ptest_password --silent; then
+              echo "MySQL is ready!"
+              break
+            fi
+            echo "Waiting for MySQL... ($i/30)"
+            sleep 2
+          done
+
       - name: Build and test
         working-directory: ./backend
         run: mvn clean verify -B
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/appsecure_test?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: test_password
+          JWT_SECRET: test-jwt-secret-key-for-ci-cd-minimum-32-characters-long
+          JWT_EXPIRATION: 86400000
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: backend/target/surefire-reports/
 
       - name: Build Docker image
         uses: docker/build-push-action@v5

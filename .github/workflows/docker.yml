@@ -8,15 +8,19 @@ on:
 jobs:
   scan-docker:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Trivy
-        uses: aquasecurity/trivy-action@v0.39.0
+      - name: Run Trivy vulnerability scan on backend image
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: backend:latest
+          severity: "CRITICAL,HIGH"
 
-      - name: Scan Backend Docker image
-        run: trivy image backend:latest
-
-      - name: Scan Frontend Docker image
-        run: trivy image frontend:latest
+      - name: Run Trivy vulnerability scan on frontend image
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: frontend:latest
+          severity: "CRITICAL,HIGH"
