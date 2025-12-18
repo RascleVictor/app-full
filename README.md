@@ -47,6 +47,6 @@ L'objectif est de fournir une base pour développer une application web sécuris
 1. **Cloner le projet** :
 
 ```bash
-git clone <repo-url>
-cd appsecure 
+git clone https://github.com/RascleVictor/app-full.git
+cd app-full 
 docker-compose up -d
