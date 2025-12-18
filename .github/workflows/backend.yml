@@ -10,7 +10,6 @@ jobs:
   build-backend:
     runs-on: ubuntu-latest
 
-    # Configuration du service MySQL
     services:
       mysql:
         image: mysql:8.0
@@ -66,7 +65,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: backend/target/surefire-reports/
